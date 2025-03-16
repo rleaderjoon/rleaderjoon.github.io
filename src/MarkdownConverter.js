@@ -1,6 +1,7 @@
 // MarkdownConverter.jsx
 import React, { useState, useEffect } from 'react';
 import MarkdownRenderer from './MarkdownRenderer';
+import './MarkdownRenderer.css'; // CSS 파일 불러오기
 
 export default function MarkdownConverter() {
     const [markdownData, setMarkdownData] = useState([]);
@@ -22,7 +23,7 @@ export default function MarkdownConverter() {
     }, []);
 
     return (
-        <div className="markdown-container">
+        <div className="markdown-container"> {/* 컨테이너 클래스 추가 */}
             {markdownData.map(({ filename, content }, index) => (
                 <div key={index} className="markdown-box">
                     <MarkdownRenderer filename={filename} content={content} />
