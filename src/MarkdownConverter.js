@@ -1,26 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
+import './MarkdownConverter.css';
 
 export default function MarkdownConverter() {
-    const [markdown, setMarkdown] = useState('');
+    const [markdownData, setMarkdownData] = useState([]);
 
     useEffect(() => {
-        // `public` 폴더는 기본 경로로 참조
-        fetch('/markdown/Test.md')
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.text();
+        // 파일 목록을 불러옵니다
+        fetch('/markdown/index.json')
+            .then(response => response.json())
+            .then(files => {
+                const fetchPromises = files.map(file =>
+                    fetch(`/markdown/${file}`)
+                        .then(response => response.text())
+                        .then(content => ({ filename: file.replace('.md', ''), content }))
+                );
+                return Promise.all(fetchPromises);
             })
-            .then((text) => setMarkdown(text))
-            .catch((error) => console.error('Error fetching markdown:', error));
+            .then(data => {
+                setMarkdownData(data);
+            });
     }, []);
 
     return (
-        <div>
-            <h1>마크다운 뷰어</h1>
-            <ReactMarkdown>{markdown}</ReactMarkdown>
+        <div className="markdown-container">
+            {markdownData.map(({ filename, content }, index) => (
+                <div key={index} className="markdown-box">
+                    <h1>{filename}</h1>
+                    <ReactMarkdown>{content}</ReactMarkdown>
+                </div>
+            ))}
         </div>
     );
 }
