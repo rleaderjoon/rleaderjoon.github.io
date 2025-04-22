@@ -1,15 +1,12 @@
-import MarkdownConverter from './MarkdownConverter';
-import CanvasViewer from "./CanvasViewer";
 import React from 'react';
-import Header from './Header'
-import MarkdownRenderer from './MarkdownRenderer';
+import Navigation from "./Navigation";
 
 function App() {
-  return (
-    <div className="App">
-      <MarkdownConverter />
-    </div>
-  );
+    return (
+        <>
+            <Navigation />
+        </>
+    );
 }
 
 export default App;
